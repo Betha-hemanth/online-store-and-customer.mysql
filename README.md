@@ -66,21 +66,41 @@ A relational database stores this information in separate tables and connects th
 
 The MySQL Workbench model represents the database structure using an Entity-Relationship (ER) model.
 
-Basic concept:
+```mermaid
+erDiagram
+    CUSTOMER ||--o{ ORDERS : places
+    ORDERS ||--|{ ORDER_ITEMS : contains
+    PRODUCTS ||--o{ ORDER_ITEMS : "included in"
 
-```text
-Customer
-   |
-   | places
-   ↓
- Orders
-   |
-   | contains
-   ↓
-Products
+    CUSTOMER {
+        int customer_id PK
+        varchar customer_name
+        varchar email
+    }
+
+    ORDERS {
+        int order_id PK
+        int customer_id FK
+        date order_date
+    }
+
+    PRODUCTS {
+        int product_id PK
+        varchar product_name
+        decimal price
+    }
+
+    ORDER_ITEMS {
+        int order_id FK
+        int product_id FK
+        int quantity
+    }
 ```
 
-The exact relationships and entities can be explored by opening the `.mwb` file in MySQL Workbench.
+- A **Customer** can place many **Orders** (one-to-many).
+- An **Order** can contain many **Order Items**, and each **Order Item** links to one **Product** — this is how the many-to-many relationship between Orders and Products is resolved using a junction table.
+
+The exact tables and relationships can be explored further by opening the `.mwb` file in MySQL Workbench.
 
 ---
 
